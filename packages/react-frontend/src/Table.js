@@ -6,9 +6,17 @@ function TableHeader() {
         <tr>
           <th>Name</th>
           <th>Job</th>
+          <th>ID</th>
         </tr>
       </thead>
     );
+  }
+
+  function DeleteUser(id) {
+    const promise = fetch(`http://localhost:8000/users/${id}`, {
+      method: "DELETE",
+    });
+    return promise
   }
   
 function TableBody(props) {
@@ -17,9 +25,14 @@ function TableBody(props) {
         <tr key={index}>
             <td>{row.name}</td>
             <td>{row.job}</td>
+            <td>{row.id}</td>
             <td>
               <button onClick={() => {
-                props.removeCharacter(index)
+                DeleteUser(row.id).then((res) => {
+                  if (res.status === 204) {
+                    props.removeCharacter(index)
+                  }
+                })
               }}>
                 Delete
               </button>
